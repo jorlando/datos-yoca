@@ -30,9 +30,12 @@ int main() {
 	vector<string> palabras(num_bag_of_words);
 	string line;
 	std::map<string,int> mymap;
+	int cant_reviews = 25000;
+	vector<vector<int> > bag(cant_reviews);
 
 	//Abro archivo
 	std::ifstream infile("labeledTrainData.tsv");
+	std::ifstream infile2("labeledTrainData.tsv");
 	//std::ifstream infile("text.txt");
 
     //Leo la primera linea que no me sirve (nombre de campos)
@@ -58,6 +61,30 @@ int main() {
 		palabras[i] = mapcopy[i].first;
 	}
 
+	//Leo la primera linea que no me sirve (nombre de campos)
+	getline(infile2, line);
+
+	int count = 0;
+	//Itero linea a linea, eliminando la primera linea (nombres de campos) y el id y puntaje de cada una
+	while(getline(infile2, line)) {
+		vector<int> unVector(num_bag_of_words);
+		istringstream iss(line);
+		string word;
+		iss >> word;
+		iss >> word;
+		while(iss >> word) {
+			for (int k=0;k<num_bag_of_words; k++ ){
+					if (palabras[k] == word){
+						unVector[k] +=1;
+					}
+				}
+		}
+		bag[count] = unVector;
+		count += 1;
+	}
+	for (int i=0;i<num_bag_of_words;i++){
+		cout << bag[0][i]<< " ";
+	}
 	infile.close();
 
 	cout << "YOCA" << endl;
