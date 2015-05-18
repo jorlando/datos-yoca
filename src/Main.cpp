@@ -85,9 +85,10 @@ vector<vector<int> > crear_Bag_Of_Words (bool stopwords,int num_bag_of_words){
 	getline(infile, line);
 
 	int count = 0;
+	int cant_mas_bias = num_bag_of_words +1 ;
 	//Itero linea a linea, armando el vector de bag of words para cada review
 	while(getline(infile, line)) {
-		vector<int> unVector(num_bag_of_words);
+		vector<int> unVector(cant_mas_bias);
 		istringstream iss(line);
 		iss >> word;
 		iss >> word;
@@ -96,6 +97,8 @@ vector<vector<int> > crear_Bag_Of_Words (bool stopwords,int num_bag_of_words){
 				unVector[mapBagOW[word]] += 1;
 			}
 		}
+		//agrego el bias
+		unVector[num_bag_of_words] = 1;
 		bag[count] = unVector;
 		count += 1;
 	}
@@ -105,7 +108,32 @@ vector<vector<int> > crear_Bag_Of_Words (bool stopwords,int num_bag_of_words){
 	return bag;
 }
 
+/*
+//Perceptron
 
+
+int cant_mas_bias = num_bag_of_words +1 ;
+vector<float> pesos(cant_mas_bias);
+
+//Inicializo vector de pesos con todos en 0.5
+for (int i = 0; i<cant_mas_bias; i++){
+	pesos[i] = 0.5;
+}
+bool perfecto = false;
+while (perfecto != true){
+	for (int review=0; review<cant_reviews;review++){
+		int suma = 0;
+		float resultado = 0;
+		for (int elemento = 0; elemento<cant_mas_bias ; elemento++){
+			suma += pesos[elemento] * bagofWord[review][element];
+		}
+		if (suma >0){
+			resultado = 1;
+		}
+	}
+
+}
+*/
 
 int main() {
 	bool stopwords = false;
