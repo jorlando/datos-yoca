@@ -1,5 +1,0 @@
-id	sentiment	review
-"5814_8"	1	"With all this stuff going down at the moment with MJ i've started listening to his music."
-"2381_9"	1	"\"The Classic War of the Worlds\" by Timothy Hines is a very entertaining film that obviously goes to great effort and lengths to faithfully recreate H. G. Wells' classic book."
-"7759_3"	0	"The film starts with a manager (Nicholas Bell) giving welcome investors (Robert Carradine) to Primal Park . A secret project mutating a primal animal using fossilized DNA, like ¨Jurassik Park¨, and some scientists resurrect one of nature's most fearsome predators."
-
