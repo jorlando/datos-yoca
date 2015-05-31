@@ -19,21 +19,27 @@ BagOfWords::~BagOfWords() {
 	// TODO Auto-generated destructor stub
 }
 
+vector<int> BagOfWords::getSentiment(){
+	return sentimiento;
+}
 
+vector<string> BagOfWords::getIds(){
+	return ids;
+}
 
-vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_of_words){
+vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_of_words, int cant_reviews, string archivo){
 	//Declaro variables
 	vector<string> palabras(num_bag_of_words);
 	string line;
 	std::map<string,int> mymap;
 	std::map<string,int> mapBagOW;
-	int cant_reviews = 25000;
 	string word;
 	vector<vector<int> > bag(cant_reviews);
 	std::map<string,int> mapStopw;
+	vector<int> sentiment (cant_reviews);
 
 	//Abro archivo
-	std::ifstream infile("../Archivos/edited.tsv");
+	std::ifstream infile(archivo.c_str());
 	//std::ifstream infile("text.txt");
 
 	//Si no se usan stoprwords armo un map con ellas
@@ -88,6 +94,7 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_
 		istringstream iss(line);
 		iss >> word;
 		iss >> word;
+		sentiment[count] = atoi(word.c_str());
 		while(iss >> word) {
 			if (mapBagOW.count(word)){
 				unVector[mapBagOW[word]] += 1;
@@ -98,8 +105,53 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_
 		bag[count] = unVector;
 		count += 1;
 	}
+	
+	this->sentimiento = sentiment; 
+	
+	infile.close();
+	
+	this->mapBagOfWords = mapBagOW;
+	
+	return bag;
+}
+
+vector<vector<int> > BagOfWords::crear_Bag_Of_Words_test (int num_bag_of_words, int cant_reviews, string archivo){
+	//Declaro variables
+	string line;
+	std::map<string,int> mapBagOW;
+	string word;
+	vector<vector<int> > bag(cant_reviews);
+	vector<string> ids(cant_reviews);
+
+	//Abro archivo
+	std::ifstream infile(archivo.c_str());
+
+	//Leo la primera linea que no me sirve (nombre de campos)
+	getline(infile, line);
+
+	int count = 0;
+	int cant_mas_bias = num_bag_of_words +1 ;
+	//Itero linea a linea, armando el vector de bag of words para cada review
+	while((getline(infile, line))&& (count < 25000)) {
+		vector<int> unVector(cant_mas_bias);
+		istringstream iss(line);
+		iss >> word;
+		ids[count] = word;
+		while(iss >> word) {
+			if (this->mapBagOfWords.count(word)){
+				unVector[this->mapBagOfWords[word]] += 1;
+			}
+		}
+		//agrego el bias
+		unVector[num_bag_of_words] = 1;
+
+		bag[count] = unVector;
+		count += 1;
+	}
+	this->ids = ids;
 
 	infile.close();
+	
 
 	return bag;
 }

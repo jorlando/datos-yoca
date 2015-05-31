@@ -6,7 +6,7 @@
  */
 
 #include "FileCleaner.h"
-
+using namespace std;
 FileCleaner::FileCleaner() {
 	// TODO Auto-generated constructor stub
 
@@ -21,10 +21,10 @@ FileCleaner::~FileCleaner() {
  */
 bool FileCleaner::ignore(int current){
 
-	if(current >= 33 && current <= 47){
+	if(current >= 33 && current <= 47 && current != 34 ){
 		return true;
 	}
-	else if(current >= 91 && current <= 96 && current != 92){
+	else if(current >= 91 && current <= 96 && current != 92 && current != 95){
 		return true;
 	}
 	else if(current >= 123 && current <= 126){
@@ -45,6 +45,7 @@ void FileCleaner::cleanFile(FILE *origin, FILE *destiny){
 
 	int current; // current char
 	bool valid;
+	int enter = 0;
 
 	while(!feof(origin)){
 
@@ -64,8 +65,13 @@ void FileCleaner::cleanFile(FILE *origin, FILE *destiny){
 		}
 		else if(current >= 58 && current <= 64){ // caso de un < el cual indica que es una etiqueta HTML
 			if(current == 60){
-				while(current!=62){ // hasta un > que cierre la etiqueta HTML
+				bool seguir = true;
+				while((current!=62)&&(seguir)){ // hasta un > que cierre la etiqueta HTML
 					current = fgetc(origin);
+					if (current == 10){
+						fputc(current, destiny);
+						seguir = false;
+					}
 				}
 			}
 			valid = false;
@@ -74,8 +80,7 @@ void FileCleaner::cleanFile(FILE *origin, FILE *destiny){
 		if(valid){
 			fputc(current, destiny);
 		}
-
+		
 	}
-
 }
 
