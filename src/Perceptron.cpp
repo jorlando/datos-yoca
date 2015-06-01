@@ -100,7 +100,7 @@ void Perceptron::perceptronNormal(){
 	}
 	
 	//Armo el archivo para el submission
-	ofstream arch ("res_perceptron.csv");
+	ofstream arch ("res_perceptron_3grams.csv");
 	arch << "id,sentiment\n";
 	for (int r = 0; r < cant_reviews_test; r++){
 		arch << ids[r];

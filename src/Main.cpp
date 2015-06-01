@@ -48,6 +48,8 @@ int main() {
 	int num_bag_of_words = 10000;
 	int cant_reviews_entrenamiento = 25000;
 	int cant_reviews_test = 25000;
+	bool bool_ngrams = true;
+	int ngrams = 3;
 	
 	vector<vector<int> > vectorBagOW;
 	vector<vector<int> > vectorTestBagOW;
@@ -59,8 +61,8 @@ int main() {
 
 	cout<<"Se crean los vectores de Bag of Words"<<endl;
 	if (bagOfWords){
-		vectorBagOW = bagW.crear_Bag_Of_Words(eliminar_stopwords,num_bag_of_words,cant_reviews_entrenamiento, "../Archivos/edited.tsv");
-		vectorTestBagOW = bagW.crear_Bag_Of_Words_test(num_bag_of_words,cant_reviews_test, "../Archivos/testEdited.tsv");
+		vectorBagOW = bagW.crear_Bag_Of_Words(eliminar_stopwords,num_bag_of_words,cant_reviews_entrenamiento, "../Archivos/edited.tsv",bool_ngrams,ngrams);
+		vectorTestBagOW = bagW.crear_Bag_Of_Words_test(num_bag_of_words,cant_reviews_test, "../Archivos/testEdited.tsv",bool_ngrams,ngrams);
 	}
 	if (hashingTrick){
 		//poner funcion que hace hashing trick

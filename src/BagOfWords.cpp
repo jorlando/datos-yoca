@@ -27,7 +27,7 @@ vector<string> BagOfWords::getIds(){
 	return ids;
 }
 
-vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_of_words, int cant_reviews, string archivo){
+vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_of_words, int cant_reviews, string archivo, bool bool_ngrams,int n_grams){
 	//Declaro variables
 	vector<string> palabras(num_bag_of_words);
 	string line;
@@ -57,7 +57,12 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_
 
 	//Leo la primera linea que no me sirve (nombre de campos)
 	getline(infile, line);
-
+	
+	//Guardo la palabra anterior
+	string pal_ant = "";
+	string pal_ant_ant = "";
+	string ngrams;
+	
 	//Itero linea a linea, eliminando el id y puntaje de cada una
 	while(getline(infile, line)) {
 		istringstream iss(line);
@@ -66,6 +71,25 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_
 		while(iss >> word) {
 			if (!(mapStopw.count(word))){
 				mymap[word] += 1;
+			}
+			if (bool_ngrams){
+				//hago 2 grams
+				ngrams = pal_ant + word;
+				if (!(mapStopw.count(ngrams))){
+					mymap[ngrams] += 1;
+				}
+				pal_ant = word;
+
+				if(n_grams == 3){
+					//Hago 3 grams
+					ngrams = pal_ant + pal_ant_ant;
+					ngrams += word;
+					if (!(mapStopw.count(ngrams))){
+						mymap[ngrams] += 1;
+					}
+					pal_ant = word;
+					pal_ant_ant = pal_ant;
+				}
 			}
 		}
 	}
@@ -85,7 +109,11 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_
 
 	//Leo la primera linea que no me sirve (nombre de campos)
 	getline(infile, line);
-
+	
+	//Guardo la palabra anterior
+	pal_ant = "";
+	pal_ant_ant = "";
+	
 	int count = 0;
 	int cant_mas_bias = num_bag_of_words +1 ;
 	//Itero linea a linea, armando el vector de bag of words para cada review
@@ -98,6 +126,25 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_
 		while(iss >> word) {
 			if (mapBagOW.count(word)){
 				unVector[mapBagOW[word]] += 1;
+			}
+			if (bool_ngrams){
+				//Hago 2 grams
+				ngrams = pal_ant + word;
+				if (mapBagOW.count(ngrams)){
+					unVector[mapBagOW[ngrams]] += 1;
+				}
+				pal_ant = word;
+
+				if(n_grams == 3){
+					// Hago 3 grams
+					ngrams = pal_ant + pal_ant_ant;
+					ngrams += word;
+					if (mapBagOW.count(ngrams)){
+						unVector[mapBagOW[ngrams]] += 1;
+					}
+					pal_ant = word;
+					pal_ant_ant = pal_ant;
+				}
 			}
 		}
 		//agrego el bias
@@ -115,7 +162,7 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_
 	return bag;
 }
 
-vector<vector<int> > BagOfWords::crear_Bag_Of_Words_test (int num_bag_of_words, int cant_reviews, string archivo){
+vector<vector<int> > BagOfWords::crear_Bag_Of_Words_test (int num_bag_of_words, int cant_reviews, string archivo, bool bool_ngrams,int n_grams){
 	//Declaro variables
 	string line;
 	std::map<string,int> mapBagOW;
@@ -131,6 +178,12 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words_test (int num_bag_of_words, 
 
 	int count = 0;
 	int cant_mas_bias = num_bag_of_words +1 ;
+	
+	//Guardo la palabra anterior
+	string pal_ant = "";
+	string pal_ant_ant = "";
+	string ngrams;
+	
 	//Itero linea a linea, armando el vector de bag of words para cada review
 	while((getline(infile, line))&& (count < 25000)) {
 		vector<int> unVector(cant_mas_bias);
@@ -140,6 +193,25 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words_test (int num_bag_of_words, 
 		while(iss >> word) {
 			if (this->mapBagOfWords.count(word)){
 				unVector[this->mapBagOfWords[word]] += 1;
+			}
+			if (bool_ngrams){
+				//Hago 2 grams
+				ngrams = pal_ant + " ";
+				ngrams += word;
+				if (this->mapBagOfWords.count(ngrams)){
+					unVector[this->mapBagOfWords[ngrams]] += 1;
+				}
+				pal_ant = word;
+				if(n_grams == 3){
+					// Hago 3 grams
+					ngrams = pal_ant + pal_ant_ant;
+					ngrams += word;
+					if (this->mapBagOfWords.count(ngrams)){
+						unVector[this->mapBagOfWords[ngrams]] += 1;
+					}
+					pal_ant = word;
+					pal_ant_ant = pal_ant;
+				}
 			}
 		}
 		//agrego el bias

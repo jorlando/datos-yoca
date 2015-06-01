@@ -9,3 +9,11 @@ Competencia: https://www.kaggle.com/c/word2vec-nlp-tutorial
 Integrantes:
   @jorlando
   @Myacobucci
+
+Compilación:
+
+`g++ Main.cpp FileCleaner.cpp BagOfWords.cpp Perceptron.cpp -o main`
+
+Ejecución:
+
+`./main`
