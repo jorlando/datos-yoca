@@ -8,3 +8,4 @@ Competencia: https://www.kaggle.com/c/word2vec-nlp-tutorial
 
 Integrantes:
   @jorlando
+  @Myacobucci
