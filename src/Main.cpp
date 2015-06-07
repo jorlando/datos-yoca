@@ -15,6 +15,8 @@
 #include "FileCleaner.h"
 #include "BagOfWords.h"
 #include "Perceptron.h"
+#include "Ballseptron.h"
+#include "LargeMargin.h"
 
 using namespace std;
 
@@ -35,21 +37,30 @@ void limpiarReviews(string in, string out){
 
 void ejecutarPerceptronNormal(int num_bag_of_words, int cant_reviews_entrenamiento, vector<vector<int> > vectorBagOW,vector<int> sentiment,vector<vector<int> > vectorTestBagOW, int cant_reviews_test, vector<string> ids){
 	Perceptron perc = Perceptron(num_bag_of_words, cant_reviews_entrenamiento, vectorBagOW, sentiment,vectorTestBagOW, cant_reviews_test, ids);
-	
 	perc.perceptronNormal();
 }
 
+void ejecutarBallseptron(int num_bag_of_words, int cant_reviews_entrenamiento, vector<vector<int> > vectorBagOW,vector<int> sentiment,vector<vector<int> > vectorTestBagOW, int cant_reviews_test, vector<string> ids){
+	Ballseptron ball = Ballseptron(num_bag_of_words, cant_reviews_entrenamiento, vectorBagOW, sentiment,vectorTestBagOW, cant_reviews_test, ids);
+	ball.ballseptron();
+}
+
+void ejecutarLargeMargin(int num_bag_of_words, int cant_reviews_entrenamiento, vector<vector<int> > vectorBagOW,vector<int> sentiment,vector<vector<int> > vectorTestBagOW, int cant_reviews_test, vector<string> ids){
+	LargeMargin large = LargeMargin(num_bag_of_words, cant_reviews_entrenamiento, vectorBagOW, sentiment,vectorTestBagOW, cant_reviews_test, ids);
+	large.LargeMarginCalculo();
+}
 int main() {
 	bool eliminar_stopwords = true;
 	bool bagOfWords = true;
 	bool hashingTrick = false;
 	bool perceptronNormal = true;
 	bool ballseptron = false;
-	int num_bag_of_words = 10000;
+	bool large_margin = false;
+	int num_bag_of_words = 12000;
 	int cant_reviews_entrenamiento = 25000;
 	int cant_reviews_test = 25000;
 	bool bool_ngrams = true;
-	int ngrams = 3;
+	int ngrams = 2;
 	
 	vector<vector<int> > vectorBagOW;
 	vector<vector<int> > vectorTestBagOW;
@@ -73,6 +84,16 @@ int main() {
 		vector<int> sentiment = bagW.getSentiment();
 		vector<string> ids = bagW.getIds();
 		ejecutarPerceptronNormal(num_bag_of_words,cant_reviews_entrenamiento,vectorBagOW, sentiment,vectorTestBagOW, cant_reviews_test, ids);
+	}
+	else if (ballseptron){
+		vector<int> sentiment = bagW.getSentiment();
+		vector<string> ids = bagW.getIds();
+		ejecutarBallseptron(num_bag_of_words,cant_reviews_entrenamiento,vectorBagOW, sentiment,vectorTestBagOW, cant_reviews_test, ids);
+	}
+	else if (large_margin){
+		vector<int> sentiment = bagW.getSentiment();
+		vector<string> ids = bagW.getIds();
+		ejecutarLargeMargin(num_bag_of_words,cant_reviews_entrenamiento,vectorBagOW, sentiment,vectorTestBagOW, cant_reviews_test, ids);
 	}
 	cout << "YOCA" << endl;
 	return 0;

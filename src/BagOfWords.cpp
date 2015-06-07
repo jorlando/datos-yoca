@@ -196,8 +196,7 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words_test (int num_bag_of_words, 
 			}
 			if (bool_ngrams){
 				//Hago 2 grams
-				ngrams = pal_ant + " ";
-				ngrams += word;
+				ngrams = pal_ant + word;
 				if (this->mapBagOfWords.count(ngrams)){
 					unVector[this->mapBagOfWords[ngrams]] += 1;
 				}
