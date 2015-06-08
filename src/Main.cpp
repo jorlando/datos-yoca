@@ -17,6 +17,7 @@
 #include "Perceptron.h"
 #include "Ballseptron.h"
 #include "LargeMargin.h"
+#include "HashingTrick.h"
 
 using namespace std;
 
@@ -65,6 +66,7 @@ int main() {
 	vector<vector<int> > vectorBagOW;
 	vector<vector<int> > vectorTestBagOW;
 	BagOfWords bagW = BagOfWords ();
+	HashingTrick hashing = HashingTrick(num_bag_of_words); //probar con otras dimensiones
 	
 	cout<<"Limpieza de reviews"<<endl;
 	limpiarReviews("../Archivos/labeledTrainData.tsv", "../Archivos/edited.tsv");
@@ -76,7 +78,8 @@ int main() {
 		vectorTestBagOW = bagW.crear_Bag_Of_Words_test(num_bag_of_words,cant_reviews_test, "../Archivos/testEdited.tsv",bool_ngrams,ngrams);
 	}
 	if (hashingTrick){
-		//poner funcion que hace hashing trick
+		hashing.aplicar_The_Hashing_Trick(vectorBagOW, cant_reviews_entrenamiento, num_bag_of_words+1);
+		hashing.aplicar_The_Hashing_Trick(vectorTestBagOW, cant_reviews_test, num_bag_of_words+1);
 	}
 	
 	cout<<"Se ejecuta el Perceptron"<<endl;
