@@ -87,7 +87,9 @@ int main() {
 	}
 	
 	if(analizeSarcasm){
+		cout<<"Limpio reviews Sarcasmo"<<endl;
 		limpiarReviews("../Archivos/SarcasmReview.txt", "../Archivos/editedSarcasm.tsv");
+		cout<<"Creo Bag of Words Sarcasmo"<<endl;
 		vectorBagOWSarcasm = bagWSarcasm.crear_Bag_Of_Words(eliminar_stopwords,num_bag_of_words,cant_reviews_sarcasm, "../Archivos/editedSarcasm.tsv",bool_ngrams,ngrams);
 		if(hashingTrick){
 			hashing.aplicar_The_Hashing_Trick(vectorBagOWSarcasm, cant_reviews_sarcasm, num_bag_of_words+1); 
