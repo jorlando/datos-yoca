@@ -185,7 +185,7 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words_test (int num_bag_of_words, 
 	string ngrams;
 	
 	//Itero linea a linea, armando el vector de bag of words para cada review
-	while((getline(infile, line))&& (count < 25000)) {
+	while((getline(infile, line))&& (count < cant_reviews)) {
 		vector<int> unVector(cant_mas_bias);
 		istringstream iss(line);
 		iss >> word;

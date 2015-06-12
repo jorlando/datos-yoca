@@ -36,9 +36,7 @@ vector<float> Perceptron::calcular_nuevos_pesos(vector<float> pesos, int sent,in
 	return pesos_nuevo_final;
 }
 
-void Perceptron::perceptronNormal(){
-	int cant_mas_bias = num_bag_of_words +1 ;
-	vector<float> pesos(cant_mas_bias);
+void Perceptron::entrenamiento(vector<float> &pesos, int cant_mas_bias){
 	//Inicializo vector de pesos con todos en 0.5
 	for (int i = 0; i<cant_mas_bias; i++){
 		pesos[i] = 0.5;
@@ -69,9 +67,9 @@ void Perceptron::perceptronNormal(){
 			perfecto = true;
 		}
 	}
-	
-	//Empiezo a hacer el test
-	vector<float> result_test (cant_reviews_test);
+}
+
+void Perceptron::clasificoTests(vector<float> &result_test, int cant_mas_bias, vector<float> &pesos){
 	for (int review2=0; review2<cant_reviews_test;review2++){
 		float suma = 0;
 		for (int elemento2 = 0; elemento2<cant_mas_bias ; elemento2++){
@@ -98,7 +96,9 @@ void Perceptron::perceptronNormal(){
 		float nuevo = (result_test[j] - minimo) / (maximo - minimo);
 		result_test[j] = nuevo;
 	}
-	
+}
+
+void Perceptron::saveResults(vector<float> &result_test){
 	//Armo el archivo para el submission
 	ofstream arch ("res_perceptron_2grams_2_12000.csv");
 	arch << "id,sentiment\n";
@@ -109,6 +109,17 @@ void Perceptron::perceptronNormal(){
 		arch << "\n";
 	}
 	arch.close();
+}
 
+vector<float> Perceptron::perceptronNormal(){
+	int cant_mas_bias = num_bag_of_words +1 ;
+	vector<float> pesos(cant_mas_bias);
+	cout<<"Perceptron - Entrenamiento"<<endl;
+	entrenamiento(pesos,cant_mas_bias);
 	
+	//Empiezo a hacer el test
+	vector<float> result_test (cant_reviews_test);
+	cout<<"Perceptron - ClasificoTests"<<endl;
+	clasificoTests(result_test, cant_mas_bias, pesos);
+	return result_test;
 }
