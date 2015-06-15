@@ -103,10 +103,10 @@ int main() {
 	string no_stop;
 	cout << "Eliminar stopwords? [S/N]: ";
 	cin >> no_stop;
-	if (no_stop == string("N")){
+	if ((no_stop == string("N"))||(no_stop == string("n"))){
 		eliminar_stopwords = false;
 	}
-	else if (!(no_stop == string("S"))){
+	else if ((!(no_stop == string("S")))&&(!(no_stop == string("s")))){
 		cout << "Valor incorrecto. Por defecto, se eliminaran las stopwords." << endl;
 	}
 	
@@ -131,11 +131,11 @@ int main() {
 	string bagHash;
 	cout << "Usar Bag Of Words normal o con Hashing Trick? [B/H]: ";
 	cin >> bagHash;
-	if (bagHash == string("H")){
+	if ((bagHash == string("H"))||(bagHash == string("h"))){
 		bagOfWords = false;
 		hashingTrick = true;
 	}
-	else if (!(bagHash == string("B"))){
+	else if ((!(bagHash == string("B")))&&(!(bagHash == string("b")))){
 		cout << "Valor incorrecto. Por defecto, se utilizara Bag of Words normal." << endl;
 	}
 	
@@ -153,11 +153,11 @@ int main() {
 	string cuantos_ngrams;
 	cout << "Usar ngrams? [S/N]: ";
 	cin >> resp_ngrams;
-	if (resp_ngrams == string("N")){
+	if ((resp_ngrams == string("N"))||(resp_ngrams == string("n"))){
 		bool_ngrams = false;
 	}
 	else{
-		if (!(resp_ngrams == string("S"))){
+		if ((!(resp_ngrams == string("S")))&&(!(resp_ngrams == string("s")))){
 			cout << "Valor incorrecto. Por defecto, se utilizaran ngrams." << endl;
 		}
 		cout << "Cuantos ngrmas usar? [2/3]: ";
@@ -172,11 +172,11 @@ int main() {
 	string que_porc;
 	cout << "Usar el detector de sarcasmo? [S/N]: ";
 	cin >> resp_sarcasm;
-	if (resp_sarcasm == string("N")){
+	if ((resp_sarcasm == string("N"))||(resp_sarcasm == string("n"))){
 		analizeSarcasm = false;
 	}
 	else{
-		if (!(resp_sarcasm == string("S"))){
+		if ((!(resp_sarcasm == string("S")))&&(!(resp_sarcasm == string("s")))){
 			cout << "Valor incorrecto. Por defecto, se utilizaran el detector de sarcasmo." << endl;
 		}
 		cout << "Que porcentaje de sarcasmo utilizar? (se recomienda 0.5 para HashingTrick, 0.95 para Bag Of Words): ";
