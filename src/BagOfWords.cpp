@@ -27,6 +27,14 @@ vector<string> BagOfWords::getIds(){
 	return ids;
 }
 
+vector< vector<int> > BagOfWords::getIndices_entr(){
+	return this->indices_entr;
+}
+
+vector< vector<int> > BagOfWords::getIndices_test(){
+	return this->indices_test;
+}
+
 vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_of_words, int cant_reviews, string archivo, bool bool_ngrams,int n_grams){
 	//Declaro variables
 	vector<string> palabras(num_bag_of_words);
@@ -62,7 +70,6 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_
 	string pal_ant = "";
 	string pal_ant_ant = "";
 	string ngrams;
-	
 	//Itero linea a linea, eliminando el id y puntaje de cada una
 	while(getline(infile, line)) {
 		istringstream iss(line);
@@ -74,15 +81,15 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_
 			}
 			if (bool_ngrams){
 				//hago 2 grams
-				ngrams = pal_ant + word;
+				ngrams = pal_ant + " " + word;
 				if (!(mapStopw.count(ngrams))){
 					mymap[ngrams] += 1;
 				}
-				pal_ant = word;
+				
 
 				if(n_grams == 3){
 					//Hago 3 grams
-					ngrams = pal_ant + pal_ant_ant;
+					ngrams = pal_ant_ant + " " + pal_ant + " ";
 					ngrams += word;
 					if (!(mapStopw.count(ngrams))){
 						mymap[ngrams] += 1;
@@ -90,19 +97,17 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_
 					pal_ant = word;
 					pal_ant_ant = pal_ant;
 				}
+				pal_ant = word;
 			}
 		}
 	}
-
 	//Copio todo lo del map a un vector para ordenar
 	vector<pair<string, int> > vector_ordenado(mymap.begin(), mymap.end());
 	sort(vector_ordenado.begin(), vector_ordenado.end(), less_second<string, int>());
-
 	//Armo un map con las palabras de mayor frecuncia
 	for (int i=0;i<num_bag_of_words; i++ ){
 		mapBagOW[vector_ordenado[i].first] = i;
 	}
-
 	//Vuelvo al comienzo del archivo de reviews
 	infile.clear();
 	infile.seekg(0, ios::beg);
@@ -113,11 +118,11 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_
 	//Guardo la palabra anterior
 	pal_ant = "";
 	pal_ant_ant = "";
-	
 	int count = 0;
 	int cant_mas_bias = num_bag_of_words +1 ;
 	//Itero linea a linea, armando el vector de bag of words para cada review
 	while(getline(infile, line)) {
+		vector<int> index;
 		vector<int> unVector(cant_mas_bias);
 		istringstream iss(line);
 		iss >> word;
@@ -125,34 +130,50 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words (bool stopwords,int num_bag_
 		sentiment[count] = atoi(word.c_str());
 		while(iss >> word) {
 			if (mapBagOW.count(word)){
+				if(!unVector[mapBagOW[word]]>0){
+					//index.push_back(mapBagOW[word]);
+				}
 				unVector[mapBagOW[word]] += 1;
 			}
 			if (bool_ngrams){
 				//Hago 2 grams
-				ngrams = pal_ant + word;
+				ngrams = pal_ant + " " + word;
 				if (mapBagOW.count(ngrams)){
+					if(!unVector[mapBagOW[ngrams]]>0){
+						//index.push_back(mapBagOW[ngrams]);
+					}
 					unVector[mapBagOW[ngrams]] += 1;
 				}
-				pal_ant = word;
+				
 
 				if(n_grams == 3){
 					// Hago 3 grams
-					ngrams = pal_ant + pal_ant_ant;
-					ngrams += word;
+					ngrams = pal_ant_ant +" " + pal_ant;
+					ngrams += " " + word;
 					if (mapBagOW.count(ngrams)){
+						if(!unVector[mapBagOW[ngrams]]>0){
+							//index.push_back(mapBagOW[ngrams]);
+						}
 						unVector[mapBagOW[ngrams]] += 1;
 					}
 					pal_ant = word;
 					pal_ant_ant = pal_ant;
 				}
+				pal_ant = word;
 			}
 		}
 		//agrego el bias
 		unVector[num_bag_of_words] = 1;
+		//index.push_back(num_bag_of_words);
+		for (int elemento = 0; elemento<cant_mas_bias ; elemento++){
+			if (unVector[elemento] > 0){
+				index.push_back(elemento);
+			}
+		}
 		bag[count] = unVector;
+		this->indices_entr.push_back(index);
 		count += 1;
 	}
-	
 	this->sentimiento = sentiment; 
 	
 	infile.close();
@@ -186,37 +207,54 @@ vector<vector<int> > BagOfWords::crear_Bag_Of_Words_test (int num_bag_of_words, 
 	
 	//Itero linea a linea, armando el vector de bag of words para cada review
 	while((getline(infile, line))&& (count < cant_reviews)) {
+		vector<int> index;
 		vector<int> unVector(cant_mas_bias);
 		istringstream iss(line);
 		iss >> word;
 		ids[count] = word;
 		while(iss >> word) {
 			if (this->mapBagOfWords.count(word)){
+				if(!unVector[this->mapBagOfWords[word]]>0){
+					//index.push_back(this->mapBagOfWords[word]);
+				}
 				unVector[this->mapBagOfWords[word]] += 1;
 			}
 			if (bool_ngrams){
 				//Hago 2 grams
-				ngrams = pal_ant + word;
+				ngrams = pal_ant + " " + word;
 				if (this->mapBagOfWords.count(ngrams)){
+					if(!unVector[this->mapBagOfWords[ngrams]]>0){
+						//index.push_back(this->mapBagOfWords[ngrams]);
+					}
 					unVector[this->mapBagOfWords[ngrams]] += 1;
 				}
-				pal_ant = word;
+				
 				if(n_grams == 3){
 					// Hago 3 grams
-					ngrams = pal_ant + pal_ant_ant;
-					ngrams += word;
+					ngrams = pal_ant_ant +" " + pal_ant;
+					ngrams += " " + word;
 					if (this->mapBagOfWords.count(ngrams)){
+						if(!unVector[this->mapBagOfWords[ngrams]]>0){
+							//index.push_back(this->mapBagOfWords[ngrams]);
+						}
 						unVector[this->mapBagOfWords[ngrams]] += 1;
 					}
 					pal_ant = word;
 					pal_ant_ant = pal_ant;
 				}
+				pal_ant = word;
 			}
 		}
 		//agrego el bias
 		unVector[num_bag_of_words] = 1;
-
+		//index.push_back(num_bag_of_words);
+		for (int elemento = 0; elemento<cant_mas_bias ; elemento++){
+			if (unVector[elemento] > 0){
+				index.push_back(elemento);
+			}
+		}
 		bag[count] = unVector;
+		this->indices_test.push_back(index);
 		count += 1;
 	}
 	this->ids = ids;
