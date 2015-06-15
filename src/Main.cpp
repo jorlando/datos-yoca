@@ -181,7 +181,7 @@ int main() {
 		}
 		cout << "Que porcentaje de sarcasmo utilizar? (se recomienda 0.5 para HashingTrick, 0.95 para Bag Of Words): ";
 		cin >> que_porc;
-		porcentaje = atoi(que_porc.c_str());
+		porcentaje = atof(que_porc.c_str());
 	}
 	
 	
@@ -202,7 +202,7 @@ int main() {
 		string radio;
 		cout << "Que radio de Ballseptron utilizar? (se recomienda de 0.005 a 0.01) " << endl;
 		cin >> radio;
-		radio_ball = atoi(radio.c_str());
+		radio_ball = atof(radio.c_str());
 	}
 	else if (tipo == string("3")){
 		perceptronNormal = false;

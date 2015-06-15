@@ -167,6 +167,7 @@ vector<float> Ballseptron::ballseptron(){
 				this->cambiar_mod_pesos = false;
 				//this->mod_pesos = sqrt(mod_pesos);
 			}
+
 			if (((float (suma)/sqrt(this->mod_pesos)) < r)&&(suma != 0) && ((sentiment[review] == resultado))){
 				if (!this->hashingTrick){
 					pesos = calcular_pesos_ballseptron(pesos,this->mod_pesos,r,yt,vectorBagOW[review],cant_mas_bias,sentiment[review],resultado);
