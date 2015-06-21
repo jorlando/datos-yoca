@@ -11,6 +11,7 @@ Diseño: https://docs.google.com/document/d/1ktAvYAwdq5U_uLgbkHMqHRwY79lTCK-mZpA
 Integrantes:
   @jorlando
   @Myacobucci
+  @Pola17
 
 Compilación:
 
